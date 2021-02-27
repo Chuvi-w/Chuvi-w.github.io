@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+</head>
+<body>
+  <h2>Не очень краткая предыстория о ПК </h2><sub><b>Есычо</b>, я не верстальщик. Про "дизайн" не надо..</sub>
+  <div><br><b>Возможно, эта инфа пригодится для дальнейшего анализа.</b></div>
+  <div>В общем, у компа есть проблема: технически в него должно "влезать" 32 гб оперативы. (8*4).<br>Много лет (где-то с 2012 по 2020-й) он "жил" с 12 гб памяти на борту (8+4)<br>
+В один момент комп начал сбоить (бсод-ы, kernel panic-и и прочие радости), и я решил прогнать <a href="https://www.memtest86.com/"><b>memtest86</b></a>. Пройдя отметку в 4 гб memtest просто намертво завис.<br>
+Сначала думал что сдохла 8гб плашка. Поставил новые. С ними было тоже самое. Стал втыкать 1 100% рабочую 8 гб плашку в каждый слот по очереди - зависает в каждом слоте.
+<br>Раздобыл плашки на 2 гб. Попробовал поставить 6 гб, в конфигурации 4+2. Так же зависает при обращении к адресам старше 4-х гб.
+<br><br><b>В данный момент</b> этот комп "доживает" с 4 гб памяти на борту.
+<br><br>На днях я попытался воспользоваться USB-SPI/I2C программатором <u>CH-341a</u>. Он не определился, хотя был 100% рабочим.
+<br>usb-порты тоже, вроде как, были рабочими. Флешки по крайней мере в них работают, да и всякие иные девайсы тоже.
+<br>В итоге решил посмотреть, что пишется в dmesg в момент подключения программатора.</div>
+<div>
+<h3>К чему это всё и зачем тут инфа про оперативку?</h3> Проблемы с оперативкой явились следствием проблем с материнкой. Возможно, дохнет какой-то мост (северный ли или южный - я хз). 
+<br>Подозреваю, что столь "странное" поведение usb может быть связано с этим-же.</div>
+<div><b>В конец лога добавил лог dmesg с этим же <u>CH-341a</u> от RaspberryPI. (Просто другого "живого" компа под рукой нет).</b> Там проблем нет.</div>
+
+<div><br><font color="#AA7788" size="5pt"><b>Прошу подсказать, что может быть причиной такого поведения.</b></font></div>
+  <pre>
+<font color="#00DD00" size="4pt"><b>[##]</b></font><font color="#EE0000" size="4pt"><b>#Ниже показан лог dmesg при втыкании программатора <u>CH-341a</u> в разные USB-порты с комментариями</b></font>
+
+<font color="#00DD00" size="4pt"><b>[##]</b></font><font color="#8800BB" size="4pt"><b>#USB 2.0, передняя панель.</b></font>
+<font color="#4E9A06">[10692.185979] </font><font color="#C4A000">usb 5-1</font>: new full-speed USB device number 11 using ohci-pci
+<font color="#4E9A06">[10692.405191] </font><font color="#C4A000">usb 5-1</font><font color=
+"#CC0000">: unable to read config index 0 descriptor/start: -84</font>
+<font color="#4E9A06">[10692.405203] </font><font color="#C4A000">usb 5-1</font><font color="#CC0000">: can't read configurations, error -84</font>
+<font color="#4E9A06">[10692.565974] </font><font color="#C4A000">usb 5-1</font>: new full-speed USB device number 12 using ohci-pci
+<font color="#4E9A06">[10692.757191] </font><font color="#C4A000">usb 5-1</font><font color=
+"#CC0000">: unable to read config index 0 descriptor/start: -84</font>
+<font color="#4E9A06">[10692.757202] </font><font color="#C4A000">usb 5-1</font><font color="#CC0000">: can't read configurations, error -84</font>
+<font color="#4E9A06">[10692.761950] </font><font color="#C4A000">usb usb5-port1</font>: attempt power cycle
+<font color="#4E9A06">[10693.233970] </font><font color="#C4A000">usb 5-1</font>: new full-speed USB device number 13 using ohci-pci
+<font color="#4E9A06">[10693.279149] </font><font color="#C4A000">usb 5-1</font><font color="#CC0000">: device descriptor read/all, error -84</font>
+<font color="#4E9A06">[10693.442038] </font><font color="#C4A000">usb 5-1</font>: new full-speed USB device number 14 using ohci-pci
+<font color="#4E9A06">[10693.487192] </font><font color="#C4A000">usb 5-1</font><font color=
+"#CC0000">: unable to read config index 0 descriptor/start: -84</font>
+<font color="#4E9A06">[10693.487204] </font><font color="#C4A000">usb 5-1</font><font color="#CC0000">: can't read configurations, error -84</font>
+<font color="#4E9A06">[10693.494039] </font><font color="#C4A000">usb usb5-port1</font><font color="#CC0000">: unable to enumerate USB device</font>
+
+<font color="#00DD00" size="4pt"><b>[##]</b></font><font color="#8800BB" size="4pt"><b>#USB 3.0, передняя панель.</b></font>
+<font color="#4E9A06">[10705.086435] </font><font color="#C4A000">usb 10-1</font>: new full-speed USB device number 10 using xhci_hcd
+<font color="#4E9A06">[10705.222503] </font><font color="#C4A000">usb 10-1</font><font color="#CC0000">: device descriptor read/64, error -71</font>
+<font color="#4E9A06">[10705.330468] </font><font color="#C4A000">xhci_hcd 0000:06:00.0</font><b>: WARN urb submitted to disabled ep</b>
+<font color="#4E9A06">[10705.330482] </font><font color="#C4A000">xhci_hcd 0000:06:00.0</font><b>: WARN urb submitted to disabled ep</b>
+<font color="#4E9A06">[10705.330489] </font><font color="#C4A000">xhci_hcd 0000:06:00.0</font><b>: WARN urb submitted to disabled ep</b>
+<font color="#4E9A06">[10705.458513] </font><font color="#C4A000">usb 10-1</font><font color="#CC0000">: device descriptor read/64, error -2</font>
+<font color="#4E9A06">[10705.694459] </font><font color="#C4A000">usb 10-1</font>: new full-speed USB device number 11 using xhci_hcd
+<font color="#4E9A06">[10705.830517] </font><font color="#C4A000">usb 10-1</font><font color="#CC0000">: device descriptor read/64, error -71</font>
+<font color="#4E9A06">[10705.938478] </font><font color="#C4A000">xhci_hcd 0000:06:00.0</font><b>: WARN urb submitted to disabled ep</b>
+<font color="#4E9A06">[10705.938494] </font><font color="#C4A000">xhci_hcd 0000:06:00.0</font><b>: WARN urb submitted to disabled ep</b>
+<font color="#4E9A06">[10705.938503] </font><font color="#C4A000">xhci_hcd 0000:06:00.0</font><b>: WARN urb submitted to disabled ep</b>
+<font color="#4E9A06">[10706.066484] </font><font color="#C4A000">usb 10-1</font><font color="#CC0000">: device descriptor read/64, error -2</font>
+<font color="#4E9A06">[10706.174541] </font><font color="#C4A000">usb usb10-port1</font>: attempt power cycle
+<font color="#4E9A06">[10706.826506] </font><font color="#C4A000">usb 10-1</font>: new full-speed USB device number 12 using xhci_hcd
+<font color="#4E9A06">[10706.860958] </font><font color="#C4A000">usb 10-1</font><font color="#CC0000">: device descriptor read/8, error -71</font>
+<font color="#4E9A06">[10706.997980] </font><font color="#C4A000">usb 10-1</font><font color="#CC0000">: device descriptor read/8, error -71</font>
+<font color="#4E9A06">[10707.230514] </font><font color="#C4A000">usb 10-1</font>: new full-speed USB device number 13 using xhci_hcd
+<font color="#4E9A06">[10707.262918] </font><font color="#C4A000">usb 10-1</font><font color="#CC0000">: device descriptor read/8, error -71</font>
+<font color="#4E9A06">[10707.400992] </font><font color="#C4A000">usb 10-1</font><font color="#CC0000">: device descriptor read/8, error -71</font>
+<font color="#4E9A06">[10707.506590] </font><font color="#C4A000">usb usb10-port1</font><font color="#CC0000">: unable to enumerate USB device</font>
+
+<font color="#00DD00" size="4pt"><b>[##]</b></font><font color="#8800BB" size="4pt"><b>#Далее следуют несколько портов в usb-3.0 хабе, подключенном к usb-3.0 сзади ПК.</b></font>
+<font color="#4E9A06">[10719.534887] </font><font color="#C4A000">usb 8-1.1.4</font>: new full-speed USB device number 7 using xhci_hcd
+<font color="#4E9A06">[10719.742936] </font><font color="#C4A000">usb 8-1.1.4</font>: New USB device found, idVendor=1a86, idProduct=5512, bcdDevice= 3.04
+<font color="#4E9A06">[10719.742945] </font><font color="#C4A000">usb 8-1.1.4</font>: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+<font color="#4E9A06">[10719.743290] </font><font color="#C4A000">usb 8-1.1.4</font><b>: Not enough bandwidth for new device state.</b>
+<font color="#4E9A06">[10719.743303] </font><font color="#C4A000">usb 8-1.1.4</font><font color="#CC0000">: can't set config #1, error -28</font>
+<font color="#4E9A06">[10723.609945] </font><font color="#C4A000">usb 8-1.1.4</font>: USB disconnect, device number 7
+
+
+<font color="#4E9A06">[10732.607378] </font><font color="#C4A000">usb 8-1.1.2</font>: new full-speed USB device number 9 using xhci_hcd
+<font color="#4E9A06">[10732.831389] </font><font color="#C4A000">usb 8-1.1.2</font>: New USB device found, idVendor=1a86, idProduct=5512, bcdDevice= 3.04
+<font color="#4E9A06">[10732.831397] </font><font color="#C4A000">usb 8-1.1.2</font>: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+<font color="#4E9A06">[10732.831741] </font><font color="#C4A000">usb 8-1.1.2</font><b>: Not enough bandwidth for new device state.</b>
+<font color="#4E9A06">[10732.831753] </font><font color="#C4A000">usb 8-1.1.2</font><font color="#CC0000">: can't set config #1, error -28</font>
+<font color="#4E9A06">[10736.153782] </font><font color="#C4A000">usb 8-1.1.2</font>: USB disconnect, device number 9
+
+
+<font color="#4E9A06">[10740.623653] </font><font color="#C4A000">usb 8-1.2</font>: new full-speed USB device number 10 using xhci_hcd
+<font color="#4E9A06">[10740.739659] </font><font color="#C4A000">usb 8-1.2</font>: New USB device found, idVendor=1a86, idProduct=5512, bcdDevice= 3.04
+<font color="#4E9A06">[10740.739668] </font><font color="#C4A000">usb 8-1.2</font>: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+<font color="#4E9A06">[10740.740010] </font><font color="#C4A000">usb 8-1.2</font><b>: Not enough bandwidth for new device state.</b>
+<font color="#4E9A06">[10740.740023] </font><font color="#C4A000">usb 8-1.2</font><font color="#CC0000">: can't set config #1, error -28</font>
+<font color="#4E9A06">[10746.394148] </font><font color="#C4A000">usb 8-1.2</font>: USB disconnect, device number 10
+
+
+<font color="#00DD00" size="4pt"><b>[##]</b></font><font color="#8800BB" size="4pt"><b>#Далее следуют порты, находящиеся на заднем корпусе ПК. Там много usb 2.0 и только два  - usb 3.0. Они будут указаны отдельно</b></font>
+<font color="#00DD00" size="4pt"><b>[##]</b></font><font color="#8800BB" size="4pt"><b>#Т.Е. Если не указано иного  - считать портом usb 2.0</b></font>
+<font color="#4E9A06">[10889.672884] </font><font color="#C4A000">usb 5-3</font>: new full-speed USB device number 15 using ohci-pci
+<font color="#4E9A06">[10889.832870] </font><font color="#C4A000">usb 5-3</font><font color="#CC0000">: device descriptor read/64, error -84</font>
+<font color="#4E9A06">[10890.129978] </font><font color="#C4A000">usb 5-3</font><font color="#CC0000">: device descriptor read/all, error -84</font>
+<font color="#4E9A06">[10890.292887] </font><font color="#C4A000">usb 5-3</font>: new full-speed USB device number 16 using ohci-pci
+<font color="#4E9A06">[10890.513957] </font><font color="#C4A000">usb 5-3</font><font color="#CC0000">: device descriptor read/all, error -84</font>
+<font color="#4E9A06">[10890.520881] </font><font color="#C4A000">usb usb5-port3</font>: attempt power cycle
+<font color="#4E9A06">[10890.992941] </font><font color="#C4A000">usb 5-3</font>: new full-speed USB device number 17 using ohci-pci
+<font color="#4E9A06">[10891.025956] </font><font color="#C4A000">usb 5-3</font><font color="#CC0000">: device descriptor read/8, error -84</font>
+<font color="#4E9A06">[10891.165972] </font><font color="#C4A000">usb 5-3</font><font color="#CC0000">: device descriptor read/all, error -84</font>
+<font color="#4E9A06">[10891.356909] </font><font color="#C4A000">usb 5-3</font>: new full-speed USB device number 18 using ohci-pci
+<font color="#4E9A06">[10891.382498] </font><font color="#C4A000">r8169 0000:05:00.0 enp5s0</font>: Link is Down
+<font color="#4E9A06">[10891.397923] </font><font color="#C4A000">usb 5-3</font><font color="#CC0000">: device descriptor read/all, error -84</font>
+<font color="#4E9A06">[10891.404917] </font><font color="#C4A000">usb usb5-port3</font><font color="#CC0000">: unable to enumerate USB device</font>
+<font color="#4E9A06">[10893.651698] </font><font color="#C4A000">r8169 0000:05:00.0 enp5s0</font>: Link is Up - 1Gbps/Full - flow control rx/tx
+
+
+<font color="#4E9A06">[10925.270107] </font><font color="#C4A000">usb 5-2</font>: new full-speed USB device number 19 using ohci-pci
+<font color="#4E9A06">[10925.458946] </font><font color="#C4A000">usb 5-2</font><font color="#CC0000">: device descriptor read/all, error -84</font>
+<font color="#4E9A06">[10925.622140] </font><font color="#C4A000">usb 5-2</font>: new full-speed USB device number 20 using ohci-pci
+<font color="#4E9A06">[10925.810943] </font><font color="#C4A000">usb 5-2</font><font color="#CC0000">: device descriptor read/all, error -84</font>
+<font color="#4E9A06">[10925.818154] </font><font color="#C4A000">usb usb5-port2</font>: attempt power cycle
+<font color="#4E9A06">[10926.290192] </font><font color="#C4A000">usb 5-2</font>: new full-speed USB device number 21 using ohci-pci
+<font color="#4E9A06">[10926.333890] </font><font color="#C4A000">usb 5-2</font><font color="#CC0000">: device descriptor read/all, error -84</font>
+<font color="#4E9A06">[10926.494163] </font><font color="#C4A000">usb 5-2</font>: new full-speed USB device number 22 using ohci-pci
+<font color="#4E9A06">[10926.526891] </font><font color="#C4A000">usb 5-2</font><font color="#CC0000">: device descriptor read/8, error -84</font>
+<font color="#4E9A06">[10926.658944] </font><font color="#C4A000">usb 5-2</font><font color="#CC0000">: device descriptor read/8, error -84</font>
+<font color="#4E9A06">[10926.766233] </font><font color="#C4A000">usb usb5-port2</font><font color="#CC0000">: unable to enumerate USB device</font>
+
+<font color="#00DD00" size="4pt"><b>[##]</b></font><font color="#8800BB" size="4pt"><b>Это я вытащил то, что сидело сзади в портах. Наушники, диск, хаб и прочее.</b></font>
+<font color="#4E9A06">[10972.736314] </font><font color="#C4A000">usb 7-2</font>: USB disconnect, device number 2
+<font color="#4E9A06">[10978.124042] </font><font color="#C4A000">usb 8-1</font>: USB disconnect, device number 2
+<font color="#4E9A06">[10978.124050] </font><font color="#C4A000">usb 8-1.1</font>: USB disconnect, device number 3
+<font color="#4E9A06">[10978.280045] </font><font color="#C4A000">usb 9-1</font>: USB disconnect, device number 2
+
+
+<font color="#4E9A06">[10999.840792] </font><font color="#C4A000">usb 4-1</font>: new full-speed USB device number 6 using ohci-pci
+<font color="#4E9A06">[11000.061851] </font><font color="#C4A000">usb 4-1</font><font color="#CC0000">: device descriptor read/all, error -84</font>
+<font color="#4E9A06">[11000.252781] </font><font color="#C4A000">usb 4-1</font>: new full-speed USB device number 7 using ohci-pci
+<font color="#4E9A06">[11000.441849] </font><font color="#C4A000">usb 4-1</font><font color="#CC0000">: device descriptor read/all, error -84</font>
+<font color="#4E9A06">[11000.448748] </font><font color="#C4A000">usb usb4-port1</font>: attempt power cycle
+<font color="#4E9A06">[11000.948809] </font><font color="#C4A000">usb 4-1</font>: new full-speed USB device number 8 using ohci-pci
+<font color="#4E9A06">[11000.981827] </font><font color="#C4A000">usb 4-1</font><font color="#CC0000">: device descriptor read/8, error -84</font>
+<font color="#4E9A06">[11001.113817] </font><font color="#C4A000">usb 4-1</font><font color="#CC0000">: device descriptor read/8, error -84</font>
+<font color="#4E9A06">[11001.404840] </font><font color="#C4A000">usb 4-1</font>: new full-speed USB device number 9 using ohci-pci
+<font color="#4E9A06">[11001.445827] </font><font color="#C4A000">usb 4-1</font><font color="#CC0000">: device descriptor read/all, error -84</font>
+<font color="#4E9A06">[11001.452837] </font><font color="#C4A000">usb usb4-port1</font><font color="#CC0000">: unable to enumerate USB device</font>
+
+<font color="#00DD00" size="4pt"><b>[##]</b></font><font color="#8800BB" size="4pt"><b>#Это - порт USB 3.0</b></font>
+<font color="#4E9A06">[11014.713272] </font><font color="#C4A000">usb 8-1</font>: new full-speed USB device number 11 using xhci_hcd
+<font color="#4E9A06">[11014.879605] </font><font color="#C4A000">usb 8-1</font>: New USB device found, idVendor=1a86, idProduct=5512, bcdDevice= 3.04
+<font color="#4E9A06">[11014.879614] </font><font color="#C4A000">usb 8-1</font>: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+<font color="#4E9A06">[11044.792874] </font><font color="#C4A000">usb 8-1</font>: USB disconnect, device number 11
+
+<font color="#00DD00" size="4pt"><b>[##]</b></font><font color="#8800BB" size="4pt"><b>#Это - второй порт USB 3.0</b></font>
+<font color="#4E9A06">[11054.026685] </font><font color="#C4A000">usb 8-2</font>: new full-speed USB device number 12 using xhci_hcd
+<font color="#4E9A06">[11054.193090] </font><font color="#C4A000">usb 8-2</font>: New USB device found, idVendor=1a86, idProduct=5512, bcdDevice= 3.04
+<font color="#4E9A06">[11054.193098] </font><font color="#C4A000">usb 8-2</font>: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+<font color="#4E9A06">[11069.233178] </font><font color="#C4A000">usb 8-2</font>: USB disconnect, device number 12
+
+<font color="#00DD00" size="4pt"><b>[##]</b></font><font color="#8800BB" size="4pt"><b>#В упор не помню, что за порт, но точно не 3.0. Странно что определилось</b></font>
+<font color="#4E9A06">[11086.683841] </font><font color="#C4A000">usb 7-1</font>: new full-speed USB device number 3 using ohci-pci
+<font color="#4E9A06">[11086.878915] </font><font color="#C4A000">usb 7-1</font>: New USB device found, idVendor=1a86, idProduct=5512, bcdDevice= 3.04
+<font color="#4E9A06">[11086.878923] </font><font color="#C4A000">usb 7-1</font>: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+<font color="#4E9A06">[11101.743217] </font><font color="#C4A000">usb 7-1</font>: USB disconnect, device number 3
+
+
+
+<font color="#4E9A06">[11130.225424] </font><font color="#C4A000">usb 4-1</font>: new full-speed USB device number 10 using ohci-pci
+<font color="#4E9A06">[11130.385431] </font><font color="#C4A000">usb 4-1</font><font color="#CC0000">: device descriptor read/64, error -84</font>
+<font color="#4E9A06">[11130.686481] </font><font color="#C4A000">usb 4-1</font><font color="#CC0000">: device descriptor read/all, error -84</font>
+<font color="#4E9A06">[11130.877430] </font><font color="#C4A000">usb 4-1</font>: new full-speed USB device number 11 using ohci-pci
+<font color="#4E9A06">[11131.037461] </font><font color="#C4A000">usb 4-1</font><font color="#CC0000">: device descriptor read/64, error -84</font>
+<font color="#4E9A06">[11131.334480] </font><font color="#C4A000">usb 4-1</font><font color="#CC0000">: device descriptor read/all, error -84</font>
+<font color="#4E9A06">[11131.341405] </font><font color="#C4A000">usb usb4-port1</font>: attempt power cycle
+<font color="#4E9A06">[11131.841449] </font><font color="#C4A000">usb 4-1</font>: new full-speed USB device number 12 using ohci-pci
+<font color="#4E9A06">[11131.882431] </font><font color="#C4A000">usb 4-1</font><font color="#CC0000">: device descriptor read/all, error -84</font>
+<font color="#4E9A06">[11132.073494] </font><font color="#C4A000">usb 4-1</font>: new full-speed USB device number 13 using ohci-pci
+<font color="#4E9A06">[11132.116425] </font><font color="#C4A000">usb 4-1</font><font color="#CC0000">: device descriptor read/all, error -84</font>
+<font color="#4E9A06">[11132.121465] </font><font color="#C4A000">usb usb4-port1</font><font color="#CC0000">: unable to enumerate USB device</font>
+
+
+<font color="#4E9A06">[11149.146074] </font><font color="#C4A000">usb 4-2</font>: new full-speed USB device number 14 using ohci-pci
+<font color="#4E9A06">[11149.367135] </font><font color="#C4A000">usb 4-2</font><font color="#CC0000">: device descriptor read/all, error -84</font>
+<font color="#4E9A06">[11149.558087] </font><font color="#C4A000">usb 4-2</font>: new full-speed USB device number 15 using ohci-pci
+<font color="#4E9A06">[11149.783075] </font><font color="#C4A000">usb 4-2</font><font color="#CC0000">: device descriptor read/all, error -84</font>
+<font color="#4E9A06">[11149.790062] </font><font color="#C4A000">usb usb4-port2</font>: attempt power cycle
+<font color="#4E9A06">[11150.290142] </font><font color="#C4A000">usb 4-2</font>: new full-speed USB device number 16 using ohci-pci
+<font color="#4E9A06">[11150.331071] </font><font color="#C4A000">usb 4-2</font><font color="#CC0000">: device descriptor read/all, error -84</font>
+<font color="#4E9A06">[11150.522129] </font><font color="#C4A000">usb 4-2</font>: new full-speed USB device number 17 using ohci-pci
+<font color="#4E9A06">[11150.563348] </font><font color="#C4A000">usb 4-2</font><font color="#CC0000">: device descriptor read/all, error -84</font>
+<font color="#4E9A06">[11150.570128] </font><font color="#C4A000">usb usb4-port2</font><font color="#CC0000">: unable to enumerate USB device</font>
+
+
+<font color="#4E9A06">[11166.478705] </font><font color="#C4A000">usb 5-4</font>: new full-speed USB device number 23 using ohci-pci
+<font color="#4E9A06">[11166.667702] </font><font color="#C4A000">usb 5-4</font><font color="#CC0000">: device descriptor read/all, error -84</font>
+<font color="#4E9A06">[11166.830699] </font><font color="#C4A000">usb 5-4</font>: new full-speed USB device number 24 using ohci-pci
+<font color="#4E9A06">[11167.019702] </font><font color="#C4A000">usb 5-4</font><font color="#CC0000">: device descriptor read/all, error -84</font>
+<font color="#4E9A06">[11167.026716] </font><font color="#C4A000">usb usb5-port4</font>: attempt power cycle
+<font color="#4E9A06">[11167.498735] </font><font color="#C4A000">usb 5-4</font>: new full-speed USB device number 25 using ohci-pci
+<font color="#4E9A06">[11167.539678] </font><font color="#C4A000">usb 5-4</font><font color="#CC0000">: device descriptor read/all, error -84</font>
+<font color="#4E9A06">[11167.702774] </font><font color="#C4A000">usb 5-4</font>: new full-speed USB device number 26 using ohci-pci
+<font color="#4E9A06">[11167.743649] </font><font color="#C4A000">usb 5-4</font><font color="#CC0000">: device descriptor read/all, error -84</font>
+<font color="#4E9A06">[11167.750764] </font><font color="#C4A000">usb usb5-port4</font><font color="#CC0000">: unable to enumerate USB device</font>
+
+
+<font color="#4E9A06">[11180.567205] </font><font color="#C4A000">usb 7-4</font>: new full-speed USB device number 4 using ohci-pci
+<font color="#4E9A06">[11180.756308] </font><font color="#C4A000">usb 7-4</font><font color="#CC0000">: device descriptor read/all, error -84</font>
+<font color="#4E9A06">[11180.919200] </font><font color="#C4A000">usb 7-4</font>: new full-speed USB device number 5 using ohci-pci
+<font color="#4E9A06">[11181.079241] </font><font color="#C4A000">usb 7-4</font><font color="#CC0000">: device descriptor read/64, error -84</font>
+<font color="#4E9A06">[11181.380292] </font><font color="#C4A000">usb 7-4</font><font color="#CC0000">: device descriptor read/all, error -84</font>
+<font color="#4E9A06">[11181.387253] </font><font color="#C4A000">usb usb7-port4</font>: attempt power cycle
+<font color="#4E9A06">[11181.859270] </font><font color="#C4A000">usb 7-4</font>: new full-speed USB device number 6 using ohci-pci
+<font color="#4E9A06">[11181.903251] </font><font color="#C4A000">usb 7-4</font><font color="#CC0000">: device descriptor read/all, error -84</font>
+<font color="#4E9A06">[11182.067274] </font><font color="#C4A000">usb 7-4</font>: new full-speed USB device number 7 using ohci-pci
+<font color="#4E9A06">[11182.108607] </font><font color="#C4A000">usb 7-4</font><font color="#CC0000">: device descriptor read/all, error -84</font>
+<font color="#4E9A06">[11182.115259] </font><font color="#C4A000">usb usb7-port4</font><font color="#CC0000">: unable to enumerate USB device</font>
+
+
+<font color="#4E9A06">[11193.787683] </font><font color="#C4A000">usb 7-3</font>: new full-speed USB device number 8 using ohci-pci
+<font color="#4E9A06">[11194.004765] </font><font color="#C4A000">usb 7-3</font><font color="#CC0000">: device descriptor read/all, error -84</font>
+<font color="#4E9A06">[11194.195707] </font><font color="#C4A000">usb 7-3</font>: new full-speed USB device number 9 using ohci-pci
+<font color="#4E9A06">[11194.355716] </font><font color="#C4A000">usb 7-3</font><font color="#CC0000">: device descriptor read/64, error -84</font>
+<font color="#4E9A06">[11194.623725] </font><font color="#C4A000">usb 7-3</font><font color="#CC0000">: device descriptor read/64, error -84</font>
+<font color="#4E9A06">[11194.731749] </font><font color="#C4A000">usb usb7-port3</font>: attempt power cycle
+<font color="#4E9A06">[11195.231700] </font><font color="#C4A000">usb 7-3</font>: new full-speed USB device number 10 using ohci-pci
+<font color="#4E9A06">[11195.272727] </font><font color="#C4A000">usb 7-3</font><font color="#CC0000">: device descriptor read/all, error -84</font>
+<font color="#4E9A06">[11195.463758] </font><font color="#C4A000">usb 7-3</font>: new full-speed USB device number 11 using ohci-pci
+<font color="#4E9A06">[11195.504735] </font><font color="#C4A000">usb 7-3</font><font color="#CC0000">: device descriptor read/all, error -84</font>
+<font color="#4E9A06">[11195.511719] </font><font color="#C4A000">usb usb7-port3</font><font color="#CC0000">: unable to enumerate USB device</font>
+
+
+<font color="#4E9A06">[11208.432222] </font><font color="#C4A000">usb 7-1</font>: new full-speed USB device number 12 using ohci-pci
+<font color="#4E9A06">[11208.621283] </font><font color="#C4A000">usb 7-1</font><font color="#CC0000">: device descriptor read/all, error -84</font>
+<font color="#4E9A06">[11208.784220] </font><font color="#C4A000">usb 7-1</font>: new full-speed USB device number 13 using ohci-pci
+<font color="#4E9A06">[11208.985298] </font><font color="#C4A000">usb 7-1</font><font color="#CC0000">: unable to read config index 0 descriptor/all</font>
+<font color="#4E9A06">[11208.985310] </font><font color="#C4A000">usb 7-1</font><font color="#CC0000">: can't read configurations, error -84</font>
+<font color="#4E9A06">[11208.992249] </font><font color="#C4A000">usb usb7-port1</font>: attempt power cycle
+<font color="#4E9A06">[11209.464238] </font><font color="#C4A000">usb 7-1</font>: new full-speed USB device number 14 using ohci-pci
+<font color="#4E9A06">[11209.505259] </font><font color="#C4A000">usb 7-1</font><font color="#CC0000">: device descriptor read/all, error -84</font>
+<font color="#4E9A06">[11209.668265] </font><font color="#C4A000">usb 7-1</font>: new full-speed USB device number 15 using ohci-pci
+<font color="#4E9A06">[11209.709596] </font><font color="#C4A000">usb 7-1</font><font color="#CC0000">: device descriptor read/all, error -84</font>
+<font color="#4E9A06">[11209.716225] </font><font color="#C4A000">usb usb7-port1</font><font color="#CC0000">: unable to enumerate USB device</font>
+
+<font color="#00DD00" size="4pt"><b>[##]</b></font><font color="#8800BB" size="4pt"><b>#Снова те-же usb-3.0 порты сзади.</b></font>
+<font color="#00DD00" size="4pt"><b>[##]</b></font><font color="#8800BB" size="4pt"><b>#Первый</b></font>
+<font color="#4E9A06">[11223.804752] </font><font color="#C4A000">usb 8-1</font>: new full-speed USB device number 13 using xhci_hcd
+<font color="#4E9A06">[11223.969887] </font><font color="#C4A000">usb 8-1</font>: New USB device found, idVendor=1a86, idProduct=5512, bcdDevice= 3.04
+<font color="#4E9A06">[11223.969895] </font><font color="#C4A000">usb 8-1</font>: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+<font color="#4E9A06">[11232.928532] </font><font color="#C4A000">usb 8-1</font>: USB disconnect, device number 13
+
+<font color="#00DD00" size="4pt"><b>[##]</b></font><font color="#8800BB" size="4pt"><b>#И второй</b></font>
+<font color="#4E9A06">[11240.581308] </font><font color="#C4A000">usb 8-2</font>: new full-speed USB device number 14 using xhci_hcd
+<font color="#4E9A06">[11240.747634] </font><font color="#C4A000">usb 8-2</font>: New USB device found, idVendor=1a86, idProduct=5512, bcdDevice= 3.04
+<font color="#4E9A06">[11240.747642] </font><font color="#C4A000">usb 8-2</font>: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+<font color="#4E9A06">[11253.856753] </font><font color="#C4A000">usb 8-2</font>: USB disconnect, device number 14
+
+<font color="#00DD00" size="4pt"><b>[##]</b></font><font color="#8800BB" size="4pt"><b>#А тут попытка подключиться через заведомо рабочий usb-2.0 удлинитель, поключенный в usb-3.0 порт</b></font>
+<font color="#4E9A06">[11297.575404] </font><font color="#C4A000">usb 8-1</font>: new full-speed USB device number 15 using xhci_hcd
+<font color="#4E9A06">[11297.991465] </font><font color="#C4A000">usb 8-1</font><font color="#CC0000">: device descriptor read/64, error -71</font>
+<font color="#4E9A06">[11298.099436] </font><font color="#C4A000">xhci_hcd 0000:03:00.0</font><b>: WARN urb submitted to disabled ep</b>
+<font color="#4E9A06">[11298.099450] </font><font color="#C4A000">xhci_hcd 0000:03:00.0</font><b>: WARN urb submitted to disabled ep</b>
+<font color="#4E9A06">[11298.099456] </font><font color="#C4A000">xhci_hcd 0000:03:00.0</font><b>: WARN urb submitted to disabled ep</b>
+<font color="#4E9A06">[11298.227477] </font><font color="#C4A000">usb 8-1</font><font color="#CC0000">: device descriptor read/64, error -2</font>
+<font color="#4E9A06">[11298.463432] </font><font color="#C4A000">usb 8-1</font>: new full-speed USB device number 16 using xhci_hcd
+<font color="#4E9A06">[11298.599492] </font><font color="#C4A000">usb 8-1</font><font color="#CC0000">: device descriptor read/64, error -71</font>
+<font color="#4E9A06">[11298.707451] </font><font color="#C4A000">xhci_hcd 0000:03:00.0</font><b>: WARN urb submitted to disabled ep</b>
+<font color="#4E9A06">[11298.707464] </font><font color="#C4A000">xhci_hcd 0000:03:00.0</font><b>: WARN urb submitted to disabled ep</b>
+<font color="#4E9A06">[11298.707471] </font><font color="#C4A000">xhci_hcd 0000:03:00.0</font><b>: WARN urb submitted to disabled ep</b>
+<font color="#4E9A06">[11298.835506] </font><font color="#C4A000">usb 8-1</font><font color="#CC0000">: device descriptor read/64, error -2</font>
+<font color="#4E9A06">[11298.943551] </font><font color="#C4A000">usb usb8-port1</font>: attempt power cycle
+<font color="#4E9A06">[11299.595474] </font><font color="#C4A000">usb 8-1</font>: new full-speed USB device number 17 using xhci_hcd
+<font color="#4E9A06">[11299.596844] </font><font color="#C4A000">usb 8-1</font><b>: Device not responding to setup address.</b>
+<font color="#4E9A06">[11299.804887] </font><font color="#C4A000">usb 8-1</font><b>: Device not responding to setup address.</b>
+<font color="#4E9A06">[11300.011485] </font><font color="#C4A000">usb 8-1</font><font color="#CC0000">: device not accepting address 17, error -71</font>
+<font color="#4E9A06">[11300.139501] </font><font color="#C4A000">usb 8-1</font>: new full-speed USB device number 18 using xhci_hcd
+<font color="#4E9A06">[11300.175880] </font><font color="#C4A000">usb 8-1</font><font color="#CC0000">: device descriptor read/8, error -71</font>
+<font color="#4E9A06">[11300.315903] </font><font color="#C4A000">usb 8-1</font><font color="#CC0000">: device descriptor read/8, error -71</font>
+<font color="#4E9A06">[11300.423549] </font><font color="#C4A000">usb usb8-port1</font><font color="#CC0000">: unable to enumerate USB device</font>
+
+<font color="#00DD00" size="4pt"><b>[##]</b></font><font color="#8800BB" size="4pt"><b>#Тут то же самое, только в другой usb-3.0 порт.</b></font>
+<font color="#4E9A06">[11315.448049] </font><font color="#C4A000">usb 8-2</font>: new full-speed USB device number 19 using xhci_hcd
+<font color="#4E9A06">[11315.588099] </font><font color="#C4A000">usb 8-2</font><font color="#CC0000">: device descriptor read/64, error -71</font>
+<font color="#4E9A06">[11315.696073] </font><font color="#C4A000">xhci_hcd 0000:03:00.0</font><b>: WARN urb submitted to disabled ep</b>
+<font color="#4E9A06">[11315.696087] </font><font color="#C4A000">xhci_hcd 0000:03:00.0</font><b>: WARN urb submitted to disabled ep</b>
+<font color="#4E9A06">[11315.696094] </font><font color="#C4A000">xhci_hcd 0000:03:00.0</font><b>: WARN urb submitted to disabled ep</b>
+<font color="#4E9A06">[11315.824110] </font><font color="#C4A000">usb 8-2</font><font color="#CC0000">: device descriptor read/64, error -2</font>
+<font color="#4E9A06">[11316.060069] </font><font color="#C4A000">usb 8-2</font>: new full-speed USB device number 20 using xhci_hcd
+<font color="#4E9A06">[11316.200121] </font><font color="#C4A000">usb 8-2</font><font color="#CC0000">: device descriptor read/64, error -71</font>
+<font color="#4E9A06">[11316.308091] </font><font color="#C4A000">xhci_hcd 0000:03:00.0</font><b>: WARN urb submitted to disabled ep</b>
+<font color="#4E9A06">[11316.308104] </font><font color="#C4A000">xhci_hcd 0000:03:00.0</font><b>: WARN urb submitted to disabled ep</b>
+<font color="#4E9A06">[11316.308111] </font><font color="#C4A000">xhci_hcd 0000:03:00.0</font><b>: WARN urb submitted to disabled ep</b>
+<font color="#4E9A06">[11316.436136] </font><font color="#C4A000">usb 8-2</font><font color="#CC0000">: device descriptor read/64, error -2</font>
+<font color="#4E9A06">[11316.544192] </font><font color="#C4A000">usb usb8-port2</font>: attempt power cycle
+<font color="#4E9A06">[11317.196106] </font><font color="#C4A000">usb 8-2</font>: new full-speed USB device number 21 using xhci_hcd
+<font color="#4E9A06">[11317.198710] </font><font color="#C4A000">usb 8-2</font><b>: Device not responding to setup address.</b>
+<font color="#4E9A06">[11317.406609] </font><font color="#C4A000">usb 8-2</font><b>: Device not responding to setup address.</b>
+<font color="#4E9A06">[11317.612126] </font><font color="#C4A000">usb 8-2</font><font color="#CC0000">: device not accepting address 21, error -71</font>
+<font color="#4E9A06">[11317.744139] </font><font color="#C4A000">usb 8-2</font>: new full-speed USB device number 22 using xhci_hcd
+<font color="#4E9A06">[11317.746632] </font><font color="#C4A000">usb 8-2</font><b>: Device not responding to setup address.</b>
+<font color="#4E9A06">[11317.954644] </font><font color="#C4A000">usb 8-2</font><b>: Device not responding to setup address.</b>
+<font color="#4E9A06">[11318.160136] </font><font color="#C4A000">usb 8-2</font><font color="#CC0000">: device not accepting address 22, error -71</font>
+<font color="#4E9A06">[11318.160254] </font><font color="#C4A000">usb usb8-port2</font><font color="#CC0000">: unable to enumerate USB device</font>
+</pre>
+<br><br>
+
+<pre>
+  <font color="#0000FF" size="4pt"><b>------------------------------------------------------------------------------------------------</b></font>
+  <font color="#0000FF" size="4pt"><b>Лог Dmesg с этим-же устройством от RaspberryPI 3b. На всякий случай уточню, что usb 3.0 у неё нет совсем.</b></font>
+  <font color="#4E9A06">[31801.899115] </font><font color="#C4A000">usb 1-1.4</font>: new full-speed USB device number 4 using dwc_otg
+  <font color="#4E9A06">[31802.031223] </font><font color="#C4A000">usb 1-1.4</font>: New USB device found, idVendor=1a86, idProduct=5512, bcdDevice= 3.04
+  <font color="#4E9A06">[31802.031246] </font><font color="#C4A000">usb 1-1.4</font>: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+  <font color="#4E9A06">[31802.121417] </font><font color="#C4A000">usbcore</font>: registered new interface driver usbserial_generic
+  <font color="#4E9A06">[31802.121480] </font><font color="#C4A000">usbserial</font>: USB Serial support registered for generic
+  <font color="#4E9A06">[31802.124349] </font><font color="#C4A000">usbcore</font>: registered new interface driver ch341
+  <font color="#4E9A06">[31802.124427] </font><font color="#C4A000">usbserial</font>: USB Serial support registered for ch341-uart
+  <font color="#4E9A06">[31802.124581] </font><font color="#C4A000">ch341 1-1.4:1.0</font>: ch341-uart converter detected
+  <font color="#4E9A06">[31802.127071] </font><font color="#C4A000">usb 1-1.4</font>: ch341-uart converter now attached to ttyUSB0
+  <font color="#4E9A06">[31802.909314] </font><font color="#EF2929"><b>Under-voltage detected! (0x00050005)</b></font>    <font color="#0000FF" size="4pt"><b>Надо менять блок питания.))</b></font>
+  <font color="#4E9A06">[31805.448634] </font><font color="#C4A000">usb 1-1.4</font>: USB disconnect, device number 4
+  <font color="#4E9A06">[31805.450375] </font><font color="#C4A000">ch341-uart ttyUSB0</font>: ch341-uart converter now disconnected from ttyUSB0
+  <font color="#4E9A06">[31805.450536] </font><font color="#C4A000">ch341 1-1.4:1.0</font>: device disconnected
+  <font color="#4E9A06">[31807.539130] </font><font color="#C4A000">usb 1-1.2</font>: new full-speed USB device number 5 using dwc_otg
+  <font color="#4E9A06">[31807.671350] </font><font color="#C4A000">usb 1-1.2</font>: New USB device found, idVendor=1a86, idProduct=5512, bcdDevice= 3.04
+  <font color="#4E9A06">[31807.671373] </font><font color="#C4A000">usb 1-1.2</font>: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+  <font color="#4E9A06">[31807.673740] </font><font color="#C4A000">ch341 1-1.2:1.0</font>: ch341-uart converter detected
+  <font color="#4E9A06">[31807.675929] </font><font color="#C4A000">usb 1-1.2</font>: ch341-uart converter now attached to ttyUSB0
+  <font color="#4E9A06">[31809.149238] </font>Voltage normalised (0x00000000)
+  <font color="#4E9A06">[31810.316636] </font><font color="#C4A000">usb 1-1.2</font>: USB disconnect, device number 5
+  <font color="#4E9A06">[31810.317573] </font><font color="#C4A000">ch341-uart ttyUSB0</font>: ch341-uart converter now disconnected from ttyUSB0
+  <font color="#4E9A06">[31810.317699] </font><font color="#C4A000">ch341 1-1.2:1.0</font>: device disconnected
+  </pre>
+</body>
+</html>
+
+
+
