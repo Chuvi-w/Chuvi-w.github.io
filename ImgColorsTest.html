@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>ConvColors</title>
+</head>
+<body>
+
+<h1>Загрузите изображение:</h1>
+
+<input type="file" id="imageUpload" accept="image/*"  multiple="multiple"/>
+<br>
+
+<script>
+        var CanvasID=0;
+
+        function removeElementsByClass(className)
+        {
+        const elements = document.getElementsByClassName(className);
+            while(elements.length > 0){
+                elements[0].parentNode.removeChild(elements[0]);
+            }
+        }
+
+        function onFileReaderLoad(evt)
+        {
+            const img = new Image();
+            img.src = evt.target.result;
+            //console.log("onFileReaderLoad (",img.src,")");
+            img.onload = () => 
+            {
+                var canvasDiv=document.createElement('div');
+                var imgCanvas = document.createElement('canvas');
+                imgCanvas.id     = "EditedImage"+CanvasID.toString();
+                CanvasID++;
+                imgCanvas.width = img.width;
+                imgCanvas.height = img.height;
+                img.cl
+                //imgCanvas.style.zIndex   = 8;
+                //imgCanvas.style.position = "absolute";
+                //imgCanvas.style.border   = "4px solid";
+               
+                var ctxEdited = imgCanvas.getContext('2d');
+                ctxEdited.drawImage(img, 0, 0, imgCanvas.width, imgCanvas.height);
+                var imageData = ctxEdited.getImageData(0, 0, imgCanvas.width, imgCanvas.height);
+                var data=imageData.data;
+
+                for(var i = 0; i < data.length; i+=4) 
+                {
+                    for(var c = 0; c < 3; c++)
+                    {  
+                        if( data[i+c] != data[i+c]|=0x0f)
+                        {
+                             data[i+c] = 0;
+                        } 
+                    }
+                   
+                }
+                imageData.data=data;
+
+                ctxEdited.putImageData(imageData, 0, 0);//, imgCanvas.width, imgCanvas.height);
+                
+                canvasDiv.appendChild(imgCanvas);
+                document.body.appendChild(canvasDiv);
+            };
+        }
+
+        function processFiles(Type, Files)
+        {
+            const AllowedTypes = 
+            {
+            'image/bmp': true,
+            'image/gif': true,
+            'image/png': true,
+            'image/jpeg': true,
+            'image/tiff': true
+            };
+            console.log("Num files (", Type,") = ", Files.length);
+            for (var i = 0 ; i < Files.length ; i++ ) 
+            {
+                const file=Files[i];
+                const type = file.type;
+                if (AllowedTypes[type])
+                {
+                    console.log("[",i,"]:Loading \"",type,"\" is  allowed.<br>\n");
+                    const reader = new FileReader();
+                    reader.onload=onFileReaderLoad;
+                    reader.readAsDataURL(file);
+                }
+                else
+                {
+                   console.log("Loading \"",type,"\" is not allowed.<br>\n");
+                }
+            }
+        }
+
+        //document.onpaste = (evt) => {handlePaste(evt)};
+        const imageUpload = document.getElementById('imageUpload');
+        imageUpload.addEventListener("paste", (evt) => {processFiles("Paste", evt.clipboardData.files);});
+        imageUpload.addEventListener('change',(evt) => {processFiles("Load", evt.target.files);});
+</script>
+
+</body>
+</html>
