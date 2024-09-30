@@ -43,15 +43,22 @@
                 ctxEdited.drawImage(img, 0, 0, imgCanvas.width, imgCanvas.height);
                 var imageData = ctxEdited.getImageData(0, 0, imgCanvas.width, imgCanvas.height);
                 var data=imageData.data;
-
+                var valid=0;
                 for(var i = 0; i < data.length; i+=4) 
                 {
+                    valid=1;    
                     for(var c = 0; c < 3; c++)
                     {  
                         if( data[i+c] != (data[i+c]|0x0f))
                         {
-                             data[i+c] = 0;
+                            valid = 0;
                         } 
+                    }
+                    if(valid == 0)
+                    {
+                        data[i+0]=0;
+                        data[i+1]=0;
+                        data[i+2]=0;   
                     }
                    
                 }
